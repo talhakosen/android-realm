@@ -10,8 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CountryFragment.OnListFragmentInteractionListener {
     EditText edt_name,edt_population,edt_code;
     Button btn_save;
     Realm realm;
@@ -20,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).build();
+        Realm.setDefaultConfiguration(realmConfig);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         realm = Realm.getDefaultInstance();
@@ -63,4 +67,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onListFragmentInteraction(Country item) {
+
+    }
 }
