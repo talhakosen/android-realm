@@ -12,7 +12,7 @@ import android.widget.EditText;
 import io.realm.Realm;
 
 public class MainActivity extends AppCompatActivity {
-    EditText edt_name,edt_population;
+    EditText edt_name,edt_population,edt_code;
     Button btn_save;
     Realm realm;
 
@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
 
         edt_name = (EditText)findViewById(R.id.edt_name);
+        edt_code = (EditText)findViewById(R.id.edt_code);
         edt_population = (EditText)findViewById(R.id.edt_population);
         btn_save = (Button) findViewById(R.id.btn_save);
 
@@ -32,7 +33,14 @@ public class MainActivity extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+                realm.beginTransaction();
+
+                Country country = realm.createObject(Country.class);
+                country.setName(edt_name.getText().toString());
+                country.setCode(edt_code.getText().toString());
+                country.setPopulation(Integer.valueOf(edt_population.getText().toString()));
+
+                realm.commitTransaction();
             }
         });
 
