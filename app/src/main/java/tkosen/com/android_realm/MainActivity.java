@@ -8,14 +8,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity implements CountryFragment.OnListFragmentInteractionListener {
     EditText edt_name,edt_population,edt_code;
     Button btn_save;
     Realm realm;
+    EventBus eventBus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements CountryFragment.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         realm = Realm.getDefaultInstance();
+        eventBus = EventBus.getDefault();
 
         edt_name = (EditText)findViewById(R.id.edt_name);
         edt_code = (EditText)findViewById(R.id.edt_code);
@@ -45,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements CountryFragment.O
                 country.setPopulation(Integer.valueOf(edt_population.getText().toString()));
 
                 realm.commitTransaction();
+
+                RealmResults<Country> countries = realm.allObjects(Country.class);
+                eventBus.post(countries);
             }
         });
 
@@ -69,6 +78,6 @@ public class MainActivity extends AppCompatActivity implements CountryFragment.O
 
     @Override
     public void onListFragmentInteraction(Country item) {
-
+        Toast.makeText(this,item.getName(),Toast.LENGTH_SHORT).show();
     }
 }

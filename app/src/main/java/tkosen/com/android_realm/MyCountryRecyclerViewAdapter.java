@@ -6,16 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
-
+import io.realm.RealmResults;
 import tkosen.com.android_realm.CountryFragment.OnListFragmentInteractionListener;
 
 public class MyCountryRecyclerViewAdapter extends RecyclerView.Adapter<MyCountryRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Country> mValues;
+    private final RealmResults<Country> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyCountryRecyclerViewAdapter(List<Country> items, OnListFragmentInteractionListener listener) {
+    public MyCountryRecyclerViewAdapter(RealmResults<Country> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -30,7 +29,7 @@ public class MyCountryRecyclerViewAdapter extends RecyclerView.Adapter<MyCountry
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mName.setText(mValues.get(position).getName());
-        holder.mPopulation.setText(mValues.get(position).getPopulation());
+        holder.mPopulation.setText(String.valueOf(mValues.get(position).getPopulation()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

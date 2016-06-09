@@ -10,6 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import io.realm.RealmResults;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -17,9 +22,14 @@ import android.view.ViewGroup;
  * interface.
  */
 public class CountryFragment extends Fragment {
+
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    MyCountryRecyclerViewAdapter viewAdapter;
+    EventBus eventBus;
+    RecyclerView list;
+
 
     public CountryFragment() {
     }
@@ -35,17 +45,21 @@ public class CountryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        eventBus = EventBus.getDefault();
+        eventBus.register(this);
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+        mListener = (OnListFragmentInteractionListener) getActivity();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_country_list, container, false);
 
+        list = (RecyclerView) view.findViewById(R.id.list);
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -82,5 +96,11 @@ public class CountryFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Country item);
+    }
+
+    @Subscribe
+    public void onEvent(RealmResults<Country> event) {
+        viewAdapter = new MyCountryRecyclerViewAdapter(event, mListener);
+        list.setAdapter(viewAdapter);
     }
 }
