@@ -2,12 +2,11 @@ package tkosen.com.android_realm;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import io.realm.Realm;
 
@@ -23,14 +22,23 @@ public class MainActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
 
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                realm.beginTransaction();
+
+                Country country = realm.createObject(Country.class);
+                country.setCode("90");
+                country.setName("Turkey");
+                country.setPopulation(80000000);
+
+                realm.commitTransaction();
             }
         });
+
+
     }
 
     @Override
